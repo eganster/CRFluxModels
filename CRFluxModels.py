@@ -1066,6 +1066,9 @@ class GlobalSplineFitBeta(PrimaryFlux):
         return np.zeros_like(E)
 
 
+from MascarettiBlasiEvoli import *
+    
+
 if __name__ == '__main__':
 
     from matplotlib import pyplot as plt
