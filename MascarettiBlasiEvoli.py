@@ -66,16 +66,16 @@ class MascarettiBlasiEvoli(PrimaryFlux):
     # change of slope          
     def slope_break(self, corsika_id, E):
         # check for case
-        
-        flux = np.where(E <= self.params[corsika_id][3], self.params[corsika_id][0] * (E/10e3)**(-self.params[corsika_id][1]) * 1e-7,
-                                                         self.params[corsika_id][2] * (E/10e3)**(-self.params[corsika_id][1] + 1.0/3.0 - 2.0) * 1e-7)
-        
-        #if E <= self.params[corsika_id][3]:
-        #    # a * (E/10TeV)**(-gamma + delta -2) * 20**-7
-        #    flux = self.params[corsika_id][0] * (E/10e3)**(-self.params[corsika_id][1] + 1.0/3.0 - 2.0) * 1e-7
-        #else:
-        #    # b * (E/10TeV)**(-gamma + delta -2) * 20**-7
-        #    flux = self.params[corsika_id][2] * (E/10e3)**(-self.params[corsika_id][1] + 1.0/3.0 - 2.0) * 1e-7
+        if np.isscalar(E):
+            if E <= self.params[corsika_id][3]:
+                # a * (E/10TeV)**(-gamma + delta -2) * 20**-7
+                flux = self.params[corsika_id][0] * (E/10e3)**(-self.params[corsika_id][1] + 1.0/3.0 - 2.0) * 1e-7
+            else:
+                # b * (E/10TeV)**(-gamma + delta -2) * 20**-7
+                flux = self.params[corsika_id][2] * (E/10e3)**(-self.params[corsika_id][1] + 1.0/3.0 - 2.0) * 1e-7
+        else:
+            flux = np.where(E <= self.params[corsika_id][3], self.params[corsika_id][0] * (E/10e3)**(-self.params[corsika_id][1]) * 1e-7,
+                                                             self.params[corsika_id][2] * (E/10e3)**(-self.params[corsika_id][1] + 1.0/3.0 - 2.0) * 1e-7)
         
         return flux
     
