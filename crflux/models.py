@@ -501,6 +501,16 @@ class HillasGaisser2012(PrimaryFlux):
             flux += p[0] * E ** (-p[1] - 1.0) * \
                 np.exp(-E / p[2] / self.rid_cutoff[i])
         return flux
+    
+    def nucleus_flux_components(self, corsika_id, E):
+        corsika_id = self._find_nearby_id(corsika_id)
+
+        flux = []
+        for i in range(1, 4):
+            p = self.params[corsika_id][i]
+            flux.append(p[0] * E ** (-p[1] - 1.0) * \
+                        np.exp(-E / p[2] / self.rid_cutoff[i]))
+        return flux
 
 
 class H3a_polygonato(HillasGaisser2012):
@@ -622,6 +632,25 @@ class GaisserStanevTilav(PrimaryFlux):
             p = self.params[corsika_id][i]
             flux += p[0] * E ** (-p[1] - 1.0) * \
                 np.exp(-E / p[2] / self.rid_cutoff[i])
+        return flux
+    
+    def nucleus_flux_components(self, corsika_id, E):
+        corsika_id = self._find_nearby_id(corsika_id)
+
+        flux = []
+        ngen = 0
+
+        if self.model == '3-gen':
+            ngen = 4
+        elif self.model == '4-gen':
+            ngen = 5
+        else:
+            raise Exception('GaisserStanevTilav(): Unknown model type.')
+
+        for i in range(1, ngen):
+            p = self.params[corsika_id][i]
+            flux.append(p[0] * E ** (-p[1] - 1.0) * \
+                        np.exp(-E / p[2] / self.rid_cutoff[i]))
         return flux
 
 
@@ -1099,6 +1128,12 @@ class GlobalSplineFitBeta(PrimaryFlux):
         return np.zeros_like(E)
 
 
+# add own models
+from MascarettiBlasiEvoli import *
+from HillasGaisser2012_mod import *
+    
+
+#if __name__ == '__main__':
 def test():
 
     from matplotlib import pyplot as plt
