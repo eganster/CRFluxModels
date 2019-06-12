@@ -1131,6 +1131,7 @@ class GlobalSplineFitBeta(PrimaryFlux):
 # add own models
 from MascarettiBlasiEvoli import *
 from HillasGaisser2012_mod import *
+from BinnedCRModel import *
     
 
 #if __name__ == '__main__':
